@@ -21,8 +21,14 @@
                     document.querySelector('#notepad').innerHTML = data;
                 }
             })
-            window.setInterval(fs.writeFile('/note', document.querySelector('#note').innterHTML), 2000);
+            saveInterval();
         })
+
+        function saveInterval(){
+            window.setInterval(fs.writeFile('/note', document.querySelector('#notepad').innerHTML, function(err){
+                if (err) throw err;
+            }), 2000);
+        }
         </script>
     </body>
 </html>
