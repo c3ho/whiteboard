@@ -6,7 +6,23 @@
     </head>
 
     <body>
-        <!-- This is a comment -->
-        <h1>Hello World!</h1>
+        <script src="https://unpkg.com/filer/dist/filer.min.js"></script>
+        <div id="notepad" contenteditable="true"></div>
+        <script>
+        const fs = new Filer.FileSystem();
+        window.addEventListener('DOMContentLoaded', (event) =>{
+            fs.readFile('/note', 'utf8', function(err, data){
+                var str;
+                if (err){
+                    str="Welcome to my notepad!";
+                    document.querySelector('#notepad').innerHTML = str;
+                }
+                else if (data){
+                    document.querySelector('#notepad').innerHTML = data;
+                }
+            })
+            window.setInterval(fs.writeFile('/note', document.querySelector('#note').innterHTML), 2000);
+        })
+        </script>
     </body>
 </html>
