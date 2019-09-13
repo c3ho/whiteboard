@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>My Web Page</title>
+        <title>My Web Notepad</title>
     </head>
 
     <body>
@@ -21,13 +21,16 @@
                     document.querySelector('#notepad').innerHTML = data;
                 }
             })
-            saveInterval();
+            //calls recently written save function every 2s
+            var saveInterval = setInterval(save, 2000);
         })
 
-        function saveInterval(){
-            window.setInterval(fs.writeFile('/note', document.querySelector('#notepad').innerHTML, function(err){
+        //save function
+        function save(){
+            fs.writeFile('/note', document.querySelector('#notepad').innerHTML, (err)=>{
                 if (err) throw err;
-            }), 2000);
+                console.log('The file has been saved');
+            });
         }
         </script>
     </body>
