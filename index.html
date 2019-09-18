@@ -58,35 +58,51 @@
         window.addEventListener('DOMContentLoaded', (event) => {
             let notepad = document.getElementById("notepad");
             let indicator = document.getElementById("status");
-
-            fs.readFile('/note', 'utf8', function (err, data) {
-                var str;
-                if (err) {
-                    str = "Welcome to my notepad!";
-                    notepad.innerHTML = str;
-                }
-                else if (data) {
-                    notepad.innerHTML = data;
-                }
-            });
-
-            //calls recently written save function every 2s
-            //var saveInterval = setInterval(save, 2000);
-            
-            notepad.addEventListener("input", event => {
-                indicator.innerHTML = "<strong>Note Unsaved</strong>. Press <i>Ctrl + S</i> to save.";
-                indicator.classList.replace("saved", "unsaved");
-            });
+            let oldvalue;
 
             //save function
             save = function() {
                 fs.writeFile('/note', document.querySelector('#notepad').innerHTML, (err) => {
                     if (err) throw err;
                     console.log('The file has been saved');
-                    indicator.innerHTML = "<strong>Note Saved!</strong>"
-                    indicator.classList.replace("unsaved", "saved");
+                    setIndicatorStatus("saved");
+                    oldvalue = notepad.innerHTML;
                 });
-            }
+            };
+
+            let setIndicatorStatus = function(status) {
+                if (status == "saved") {
+                    indicator.innerHTML = "<strong>Note Saved!</strong>";
+                    indicator.classList.replace("unsaved", "saved");
+                }
+                if (status == "unsaved") {
+                    indicator.innerHTML = "<strong>Note Unsaved</strong>. Press <i>Ctrl + S</i> to save.";
+                    indicator.classList.replace("saved", "unsaved");
+                }
+            };
+
+            fs.readFile('/note', 'utf8', function (err, data) {
+                var str;
+                if (err) {
+                    str = "Welcome to my notepad!";
+                    notepad.innerHTML = str;
+                    oldvalue = str;
+                }
+                else if (data) {
+                    notepad.innerHTML = data;
+                    oldvalue = data;
+                }
+            });
+
+            //calls recently written save function every 2s
+            //var saveInterval = setInterval(save, 2000);
+            notepad.addEventListener("input", event => {
+                if (oldvalue != event.target.innerHTML) {
+                    setIndicatorStatus("unsaved");
+                } else {
+                    setIndicatorStatus("saved");
+                }
+            });
         });
     </script>
 </body>
