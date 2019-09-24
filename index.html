@@ -51,7 +51,7 @@
         //prevents windows from trying to save html page and instead calls save function
         hotkeys('ctrl+s', function(){
             event.preventDefault();
-            console.log('hotkey for save pressed (ctrl+s)');
+            // console.log('Hotkey for save pressed (ctrl+s)');
             save();
         });
 
@@ -64,7 +64,7 @@
             save = function() {
                 fs.writeFile('/note', notepad.innerHTML, (err) => {
                     if (err) throw err;
-                    console.log('The file has been saved');
+                    console.log('"ctrl-s" was pressed and the file has been successfully saved.');
                     setIndicatorStatus("saved");
                     oldvalue = notepad.innerHTML;
                 });
